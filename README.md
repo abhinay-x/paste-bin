@@ -30,6 +30,39 @@ An index is defined on `expiresAt` for efficient lookups.
 - `GET /api/pastes/:id` - fetch paste JSON (increments view count)
 - `GET /p/:id` - server-rendered HTML view (also increments view count)
 
+## Feature checklist
+
+### Core (must-have)
+
+- [x] Create paste (multi-line text)
+- [x] Validate non-empty content (whitespace-only rejected)
+- [x] Optional TTL expiry
+- [x] Optional max views
+- [x] Shareable URL returned (id)
+- [x] Paste retrieval API increments view count
+- [x] Paste retrieval returns content + expiry time
+- [x] Paste retrieval returns remaining views (`remainingViews`)
+- [x] HTML view at `/p/:id` uses `<pre>` and escapes content
+- [x] All unavailable pastes return 404
+- [x] Health check at `/api/healthz` with DB connectivity check
+- [x] Deterministic testing support via `TEST_MODE=1` and `x-test-now-ms`
+
+### Professional enhancements
+
+- [x] Concurrency-safe atomic view counting (single `findOneAndUpdate` + `$inc`)
+- [x] Consistent JSON API errors (`validation_error`, `not_found`, `internal_server_error`)
+- [x] Frontend loading + error states
+- [x] Frontend disabled submit until valid
+
+### UX / recruiter-wow (safe extras)
+
+- [x] Copy-to-clipboard for generated paste URL
+- [x] Paste metadata display (created time, expiry time, remaining views)
+- [x] Expiry countdown on view page
+- [x] “Last view remaining” warning
+- [x] Dark mode + light mode toggle (persisted)
+- [x] Advanced options toggle (TTL / max views)
+
 ## Concurrency safety (atomic view counting)
 
 Paste fetch uses a **single MongoDB atomic operation** (`findOneAndUpdate` + `$inc`) that:

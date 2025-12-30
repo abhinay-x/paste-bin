@@ -67,13 +67,17 @@ export async function getPasteJson(req, res) {
     return res.status(404).json({ error: "not_found" });
   }
 
+  const remainingViews =
+    paste.maxViews === null ? null : Math.max(0, paste.maxViews - paste.viewCount);
+
   return res.json({
     id: paste._id,
     content: paste.content,
     createdAt: paste.createdAt,
     expiresAt: paste.expiresAt,
     maxViews: paste.maxViews,
-    viewCount: paste.viewCount
+    viewCount: paste.viewCount,
+    remainingViews
   });
 }
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import PasteForm from "../components/PasteForm.jsx";
+import { Copy } from "lucide-react";
 import { api } from "../services/api.js";
 
 function buildUrl(path) {
@@ -48,7 +49,7 @@ export default function Home() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight">Create a paste</h1>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-600 dark:text-slate-400">
           Optional TTL and max views are enforced atomically on the backend.
         </p>
       </div>
@@ -58,8 +59,8 @@ export default function Home() {
           className={
             "rounded-xl border px-4 py-3 text-sm " +
             (toast.type === "success"
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
-              : "border-rose-500/30 bg-rose-500/10 text-rose-200")
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200"
+              : "border-rose-500/30 bg-rose-500/10 text-rose-800 dark:text-rose-200")
           }
         >
           {toast.message}
@@ -67,20 +68,23 @@ export default function Home() {
       ) : null}
 
       {createdPath ? (
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1">
-              <div className="text-sm font-medium text-slate-200">Your paste</div>
-              <a className="font-mono text-sm text-blue-300 hover:underline" href={createdPath}>
+              <div className="text-sm font-medium text-slate-900 dark:text-slate-200">Your paste</div>
+              <a
+                className="font-mono text-sm text-blue-600 hover:underline dark:text-blue-300"
+                href={createdPath}
+              >
                 {buildUrl(createdPath)}
               </a>
             </div>
             <button
               type="button"
               onClick={copyLink}
-              className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-slate-200 hover:border-slate-600"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600"
             >
-              Copy link
+              <Copy size={16} />
             </button>
           </div>
         </div>
