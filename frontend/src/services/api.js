@@ -1,0 +1,46 @@
+const rawBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
+function trimTrailingSlash(s) {
+  return s.endsWith("/") ? s.slice(0, -1) : s;
+}
+
+const baseUrl = trimTrailingSlash(rawBase);
+
+async function request(path, options) {
+  const res = await fetch(`${baseUrl}${path}`, {
+    headers: {
+      "content-type": "application/json",
+      ...(options?.headers || {})
+    },
+    ...options
+  });
+
+  if (!res.ok) {
+    let msg = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (body?.error === "not_found") msg = "Paste not found or expired";
+      else if (body?.error === "validation_error") msg = "Validation error";
+    } catch {
+
+    }
+    throw new Error(msg);
+  }
+
+  return res.json();
+}
+
+export const api = {
+  baseUrl,
+  async createPaste({ content, ttlSeconds, maxViews }) {
+    return request("/api/pastes", {
+      method: "POST",
+      body: JSON.stringify({ content, ttlSeconds, maxViews })
+    });
+  },
+  async getPaste(id) {
+    return request(`/api/pastes/${encodeURIComponent(id)}`, {
+      method: "GET"
+    });
+  }
+};
