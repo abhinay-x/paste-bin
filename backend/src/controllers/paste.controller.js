@@ -5,6 +5,12 @@ import { escapeHtml } from "../utils/escape.util.js";
 import { getCurrentTime } from "../utils/time.util.js";
 import { validateCreatePasteBody } from "../utils/validate.util.js";
 
+function getBaseUrl(req) {
+  const proto = req.protocol;
+  const host = req.get('host');
+  return `${proto}://${host}`;
+}
+
 function buildActivePasteQuery({ id, now }) {
   return {
     _id: id,
@@ -40,21 +46,25 @@ export async function createPaste(req, res) {
     return res.status(400).json({ error: "validation_error", details: validated.errors });
   }
 
-  const { content, ttlSeconds, maxViews } = validated.value;
+  const { content, ttl_seconds, max_views } = validated.value;
 
   const id = nanoid(10);
-  const expiresAt = ttlSeconds ? new Date(now.getTime() + ttlSeconds * 1000) : null;
+  const expiresAt = ttl_seconds ? new Date(now.getTime() + ttl_seconds * 1000) : null;
 
   await Paste.create({
     _id: id,
     content,
     createdAt: now,
     expiresAt,
-    maxViews,
+    maxViews: max_views,
     viewCount: 0
   });
 
-  return res.status(201).json({ id });
+  const baseUrl = getBaseUrl(req);
+  return res.status(201).json({ 
+    id,
+    url: `${baseUrl}/p/${id}`
+  });
 }
 
 export async function getPasteJson(req, res) {
@@ -71,13 +81,10 @@ export async function getPasteJson(req, res) {
     paste.maxViews === null ? null : Math.max(0, paste.maxViews - paste.viewCount);
 
   return res.json({
-    id: paste._id,
     content: paste.content,
-    createdAt: paste.createdAt,
-    expiresAt: paste.expiresAt,
-    maxViews: paste.maxViews,
-    viewCount: paste.viewCount,
-    remainingViews
+    remaining_views: paste.maxViews === null ? null : Math.max(0, paste.maxViews - paste.viewCount),
+    expires_at: paste.expiresAt ? paste.expiresAt.toISOString() : null,
+    created_at: paste.createdAt.toISOString()
   });
 }
 

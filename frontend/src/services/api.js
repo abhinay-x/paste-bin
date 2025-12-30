@@ -35,7 +35,7 @@ export const api = {
   async createPaste({ content, ttlSeconds, maxViews }) {
     return request("/api/pastes", {
       method: "POST",
-      body: JSON.stringify({ content, ttlSeconds, maxViews })
+      body: JSON.stringify({ content, ttl_seconds: ttlSeconds, max_views: maxViews })
     });
   },
   async getPaste(id) {

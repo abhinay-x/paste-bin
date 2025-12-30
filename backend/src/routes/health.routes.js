@@ -9,11 +9,11 @@ healthRouter.get("/healthz", async (req, res) => {
   if (dbState === 1) {
     try {
       await mongoose.connection.db.admin().ping();
-      return res.json({ ok: true, db: "up" });
+      return res.json({ ok: true });
     } catch (err) {
-      return res.status(503).json({ ok: false, db: "down" });
+      return res.status(503).json({ ok: false });
     }
   }
 
-  return res.status(503).json({ ok: false, db: "down" });
+  return res.status(503).json({ ok: false });
 });

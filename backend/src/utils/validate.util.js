@@ -21,14 +21,14 @@ export function validateCreatePasteBody(body) {
     errors.content = "too_large";
   }
 
-  const ttlSeconds = parseOptionalPositiveInt(body?.ttlSeconds);
+  const ttlSeconds = parseOptionalPositiveInt(body?.ttl_seconds);
   if (ttlSeconds && typeof ttlSeconds === "object") {
-    errors.ttlSeconds = ttlSeconds.error;
+    errors.ttl_seconds = ttlSeconds.error;
   }
 
-  const maxViews = parseOptionalPositiveInt(body?.maxViews);
+  const maxViews = parseOptionalPositiveInt(body?.max_views);
   if (maxViews && typeof maxViews === "object") {
-    errors.maxViews = maxViews.error;
+    errors.max_views = maxViews.error;
   }
 
   if (Object.keys(errors).length > 0) {
@@ -39,8 +39,8 @@ export function validateCreatePasteBody(body) {
     ok: true,
     value: {
       content: body.content,
-      ttlSeconds: ttlSeconds ?? null,
-      maxViews: maxViews ?? null
+      ttl_seconds: ttlSeconds ?? null,
+      max_views: maxViews ?? null
     }
   };
 }

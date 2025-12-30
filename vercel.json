@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "backend/vercel.js", "use": "@vercel/node" },
+    { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "routes": [
+    { "src": "/api/healthz", "dest": "backend/vercel.js" },
+    { "src": "/api/pastes", "methods": ["POST"], "dest": "backend/vercel.js" },
+    { "src": "/api/pastes/(.*)", "dest": "backend/vercel.js" },
+    { "src": "/p/(.*)", "dest": "backend/vercel.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}

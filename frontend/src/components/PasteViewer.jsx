@@ -34,27 +34,24 @@ export default function PasteViewer({ paste }) {
   }, []);
 
   const remainingViews = useMemo(() => {
-    if (paste.remainingViews !== undefined) return paste.remainingViews;
-    return paste.maxViews == null ? null : Math.max(0, paste.maxViews - paste.viewCount);
+    return paste.remaining_views == null ? null : paste.remaining_views;
   }, [paste]);
 
   const expiresInMs = useMemo(() => {
-    if (!paste.expiresAt) return null;
-    const expiry = new Date(paste.expiresAt).getTime();
+    if (!paste.expires_at) return null;
+    const expiry = new Date(paste.expires_at).getTime();
     if (Number.isNaN(expiry)) return null;
     return expiry - nowMs;
-  }, [paste.expiresAt, nowMs]);
+  }, [paste.expires_at, nowMs]);
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <Badge>
-          Views: {paste.viewCount}
-          {paste.maxViews == null ? "" : ` / ${paste.maxViews}`}
+          Remaining views: {remainingViews == null ? "∞" : remainingViews}
         </Badge>
-        <Badge>Remaining: {remainingViews == null ? "∞" : remainingViews}</Badge>
-        <Badge>Created: {formatDateTime(paste.createdAt)}</Badge>
-        {paste.expiresAt ? <Badge>Expires: {formatDateTime(paste.expiresAt)}</Badge> : null}
+                <Badge>Created: {formatDateTime(paste.created_at)}</Badge>
+        {paste.expires_at ? <Badge>Expires: {formatDateTime(paste.expires_at)}</Badge> : null}
         {expiresInMs != null ? <Badge>In: {formatCountdown(expiresInMs)}</Badge> : null}
       </div>
 
