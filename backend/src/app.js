@@ -5,7 +5,9 @@ import helmet from "helmet";
 import { healthRouter } from "./routes/health.routes.js";
 import { pasteApiRouter, pasteHtmlRouter } from "./routes/paste.routes.js";
 
-export const app = express();
+const app = express();
+export { app };
+export default app;
 
 app.use(helmet());
 app.use(cors());
