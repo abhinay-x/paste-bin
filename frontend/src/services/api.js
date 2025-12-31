@@ -41,8 +41,13 @@ export const api = {
     });
   },
   async getPaste(id) {
-    return request(`/api/pastes/${encodeURIComponent(id)}`, {
+    const raw = await request(`/api/pastes/${encodeURIComponent(id)}`, {
       method: "GET"
     });
+    return {
+      ...raw,
+      remainingViews: raw.remaining_views,
+      expiresAt: raw.expires_at
+    };
   }
 };

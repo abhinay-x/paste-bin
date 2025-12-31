@@ -61,10 +61,8 @@ export async function createPaste(req, res) {
   });
 
   const baseUrl = getBaseUrl(req);
-  return res.status(201).json({ 
-    id,
-    url: `${baseUrl}/p/${id}`
-  });
+  const url = `${baseUrl}/p/${id}`;
+  return res.status(201).json({ id, url });
 }
 
 export async function getPasteJson(req, res) {
@@ -77,14 +75,13 @@ export async function getPasteJson(req, res) {
     return res.status(404).json({ error: "not_found" });
   }
 
-  const remainingViews =
+  const remaining_views =
     paste.maxViews === null ? null : Math.max(0, paste.maxViews - paste.viewCount);
 
   return res.json({
     content: paste.content,
-    remaining_views: paste.maxViews === null ? null : Math.max(0, paste.maxViews - paste.viewCount),
-    expires_at: paste.expiresAt ? paste.expiresAt.toISOString() : null,
-    created_at: paste.createdAt.toISOString()
+    remaining_views,
+    expires_at: paste.expiresAt ? paste.expiresAt.toISOString() : null
   });
 }
 

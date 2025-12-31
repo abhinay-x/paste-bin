@@ -34,15 +34,15 @@ export default function PasteViewer({ paste }) {
   }, []);
 
   const remainingViews = useMemo(() => {
-    return paste.remaining_views == null ? null : paste.remaining_views;
+    return paste.remainingViews == null ? null : paste.remainingViews;
   }, [paste]);
 
   const expiresInMs = useMemo(() => {
-    if (!paste.expires_at) return null;
-    const expiry = new Date(paste.expires_at).getTime();
+    if (!paste.expiresAt) return null;
+    const expiry = new Date(paste.expiresAt).getTime();
     if (Number.isNaN(expiry)) return null;
     return expiry - nowMs;
-  }, [paste.expires_at, nowMs]);
+  }, [paste.expiresAt, nowMs]);
 
   return (
     <div className="space-y-4">
@@ -50,8 +50,8 @@ export default function PasteViewer({ paste }) {
         <Badge>
           Remaining views: {remainingViews == null ? "∞" : remainingViews}
         </Badge>
-                <Badge>Created: {formatDateTime(paste.created_at)}</Badge>
-        {paste.expires_at ? <Badge>Expires: {formatDateTime(paste.expires_at)}</Badge> : null}
+        <Badge>Created: {formatDateTime(paste.createdAt)}</Badge>
+        {paste.expiresAt ? <Badge>Expires: {formatDateTime(paste.expiresAt)}</Badge> : null}
         {expiresInMs != null ? <Badge>In: {formatCountdown(expiresInMs)}</Badge> : null}
       </div>
 

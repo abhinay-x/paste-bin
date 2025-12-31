@@ -2,6 +2,12 @@
 
 A small Pastebin-like application built with a **stateless Express API** and a **React (Vite) frontend**.
 
+## URLs
+
+- **Live app:** https://paste-bin-red.vercel.app/
+- **API base:** https://paste-bin-yvgj.onrender.com
+- **GitHub repository:** https://github.com/abhinay-x/paste-bin.git
+
 ## Architecture
 
 - Frontend: React + Vite + Tailwind
@@ -32,7 +38,7 @@ An index is defined on `expiresAt` for efficient lookups.
 
 ## Feature checklist
 
-### Core (must-have)
+### Core 
 
 - [x] Create paste (multi-line text)
 - [x] Validate non-empty content (whitespace-only rejected)
