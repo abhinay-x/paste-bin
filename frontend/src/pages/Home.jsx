@@ -11,6 +11,7 @@ function buildUrl(path) {
 export default function Home() {
   const [creating, setCreating] = useState(false);
   const [createdId, setCreatedId] = useState(null);
+  const [createdUrl, setCreatedUrl] = useState(null);
   const [toast, setToast] = useState(null);
 
   const createdPath = useMemo(() => {
@@ -23,8 +24,9 @@ export default function Home() {
     setToast(null);
 
     try {
-      const { id } = await api.createPaste({ content, ttlSeconds, maxViews });
+      const { id, url } = await api.createPaste({ content, ttlSeconds, maxViews });
       setCreatedId(id);
+      setCreatedUrl(url || null);
       setToast({ type: "success", message: "Paste created" });
     } catch (err) {
       setToast({ type: "error", message: err.message || "Failed to create paste" });
@@ -34,8 +36,8 @@ export default function Home() {
   }
 
   async function copyLink() {
-    if (!createdPath) return;
-    const url = buildUrl(createdPath);
+    const url = createdUrl || (createdPath ? buildUrl(createdPath) : null);
+    if (!url) return;
 
     try {
       await navigator.clipboard.writeText(url);
@@ -74,9 +76,9 @@ export default function Home() {
               <div className="text-sm font-medium text-slate-900 dark:text-slate-200">Your paste</div>
               <a
                 className="font-mono text-sm text-blue-600 hover:underline dark:text-blue-300"
-                href={createdPath}
+                href={createdUrl || createdPath}
               >
-                {buildUrl(createdPath)}
+                {createdUrl || buildUrl(createdPath)}
               </a>
             </div>
             <button

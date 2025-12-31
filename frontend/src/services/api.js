@@ -1,4 +1,6 @@
-const rawBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+// In production on Vercel, default to relative base so requests go to the same domain
+// Locally, you can set VITE_API_BASE_URL=http://localhost:8080 to point to the dev server
+const rawBase = import.meta.env.VITE_API_BASE_URL || "";
 
 function trimTrailingSlash(s) {
   return s.endsWith("/") ? s.slice(0, -1) : s;
