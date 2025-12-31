@@ -42,6 +42,21 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText(url);
       setToast({ type: "success", message: "Link copied" });
+      return;
+    } catch {}
+
+    // Fallback copy method for environments where navigator.clipboard is restricted
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setToast({ type: "success", message: "Link copied" });
     } catch {
       setToast({ type: "error", message: "Could not copy link" });
     }
@@ -84,7 +99,9 @@ export default function Home() {
             <button
               type="button"
               onClick={copyLink}
+              disabled={!createdUrl && !createdPath}
               className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600"
+              title="Copy link"
             >
               <Copy size={16} />
             </button>
